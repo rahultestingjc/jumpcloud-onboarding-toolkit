@@ -25,8 +25,8 @@ end user installs the agent, answers one prompt, and their device is correctly b
 their JumpCloud identity — with full logging and graceful handling of the messy real-world
 states devices show up in.
 
-> **The result:** what used to be a multi-step, per-device admin task becomes a roughly
-> one-minute, user-driven action — turning hours of hands-on onboarding into minutes.
+> **The result:** a complicated, multi-step per-device process that normally takes about half
+> an hour becomes a roughly one-minute, user-driven action.
 
 ---
 

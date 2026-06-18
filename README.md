@@ -1,14 +1,14 @@
 <div align="center">
 
-# JumpCloud Onboarding Toolkit
+# Automatic Account Takeover for Windows
 
-**Automation scripts that make customer onboarding to JumpCloud faster, safer, and nearly hands-free.**
+**Automatically takes over the existing local Windows account and binds it to the correct JumpCloud user during onboarding — no manual admin work.**
 
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-5391FE?logo=powershell&logoColor=white)](https://learn.microsoft.com/powershell/)
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white)](#prerequisites)
 [![JumpCloud](https://img.shields.io/badge/JumpCloud-API-000000)](https://jumpcloud.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Maintenance](https://img.shields.io/badge/maintained-yes-brightgreen.svg)](#roadmap)
+[![Maintenance](https://img.shields.io/badge/maintained-yes-brightgreen.svg)](#overview)
 
 </div>
 
@@ -20,7 +20,7 @@ Onboarding a customer's fleet to JumpCloud usually means an admin manually touch
 device — matching local accounts to JumpCloud identities, binding systems, and setting the
 primary user one by one. It's slow, error-prone, and doesn't scale.
 
-This toolkit replaces that manual work with **self-service, MDM-dispatched automation**. An
+This tool replaces that manual work with **self-service, MDM-dispatched automation**. An
 end user installs the agent, answers one prompt, and their device is correctly bound to
 their JumpCloud identity — with full logging and graceful handling of the messy real-world
 states devices show up in.
@@ -33,7 +33,7 @@ states devices show up in.
 ## Table of Contents
 
 - [Highlights](#highlights)
-- [What's in the toolkit](#whats-in-the-toolkit)
+- [At a glance](#at-a-glance)
 - [How it works](#how-it-works)
 - [What the user sees](#what-the-user-sees)
 - [Repository structure](#repository-structure)
@@ -62,13 +62,11 @@ states devices show up in.
 
 ---
 
-## What's in the toolkit
+## At a glance
 
 | Script | Platform | What it solves | Time saved |
 |--------|----------|----------------|------------|
 | [`Invoke-DeviceEnrollment.ps1`](scripts/device-enrollment/windows/Invoke-DeviceEnrollment.ps1) | Windows (PowerShell) | Takes over the local account and binds the device to the correct JumpCloud user during enrollment | Replaces a manual, multi-step per-device admin task with a roughly one-minute, user-driven action |
-
-> _More scripts (macOS / Bash) are on the [roadmap](#roadmap) — this toolkit is built to grow._
 
 ---
 
@@ -129,7 +127,7 @@ The entire experience for the end user is two simple dialogs — enter an email,
 ## Repository structure
 
 ```
-jumpcloud-onboarding-toolkit/
+automatic-account-takeover-windows/
 ├── README.md
 ├── LICENSE
 ├── .gitignore

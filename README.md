@@ -149,9 +149,6 @@ automatic-account-takeover-windows/
   - update system users (`PUT /systemusers/{id}`)
   - create user↔system associations (`POST /v2/users/{id}/associations`)
   - update systems (`PUT /systems/{id}`)
-- PowerShell **5.1+** (ships with Windows 10/11).
-- The script must run with **administrative / SYSTEM** rights (it installs modules for all
-  users and may rename a local account). The `RunAsUser` module is installed automatically.
 - The device must **not** be domain-joined, Azure AD-joined, or signed in with a Microsoft
   account — these are intentionally blocked.
 

@@ -12,6 +12,9 @@
 
 </div>
 
+> 🍎 **Looking for the macOS version?** See
+> [automatic-account-takeover-macos](https://github.com/rahultestingjc/automatic-account-takeover-macos).
+
 ---
 
 ## Overview

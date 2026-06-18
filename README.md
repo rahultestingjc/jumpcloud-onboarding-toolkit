@@ -152,7 +152,7 @@ jumpcloud-onboarding-toolkit/
 This script is designed to be dispatched from JumpCloud as a **Command** (run as `System`)
 targeting Windows devices.
 
-1. In the JumpCloud Admin Console, create a new **Command** → **Windows** → run as `System`.
+1. In the JumpCloud Admin Console, create a new **Command** → **Windows** → Select Powershell Checkbox.
 2. Paste the contents of
    [`Invoke-DeviceEnrollment.ps1`](scripts/device-enrollment/windows/Invoke-DeviceEnrollment.ps1).
 3. Provide the required values for the configuration placeholders (see

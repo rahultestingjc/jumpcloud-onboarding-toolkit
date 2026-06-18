@@ -21,12 +21,12 @@ device — matching local accounts to JumpCloud identities, binding systems, and
 primary user one by one. It's slow, error-prone, and doesn't scale.
 
 This toolkit replaces that manual work with **self-service, MDM-dispatched automation**. An
-end user runs a single command, answers one prompt, and their device is correctly bound to
+end user installs the agent, answers one prompt, and their device is correctly bound to
 their JumpCloud identity — with full logging and graceful handling of the messy real-world
 states devices show up in.
 
-> **The result:** what used to be a multi-step, per-device admin task becomes a ~30-second,
-> user-driven action — turning hours of hands-on onboarding into minutes.
+> **The result:** what used to be a multi-step, per-device admin task becomes a roughly
+> one-minute, user-driven action — turning hours of hands-on onboarding into minutes.
 
 <!--
   📸 SCREENSHOT PLACEHOLDER (hero image)
@@ -52,7 +52,6 @@ states devices show up in.
 - [Deployment](#deployment)
 - [Configuration](#configuration)
 - [Output & logging](#output--logging)
-- [Security considerations](#security-considerations)
 - [Roadmap](#roadmap)
 - [License](#license)
 
@@ -79,7 +78,7 @@ states devices show up in.
 
 | Script | Platform | What it solves | Time saved |
 |--------|----------|----------------|------------|
-| [`Invoke-DeviceEnrollment.ps1`](scripts/device-enrollment/windows/Invoke-DeviceEnrollment.ps1) | Windows (PowerShell) | Takes over the local account and binds the device to the correct JumpCloud user during enrollment | Replaces a manual, multi-step per-device admin task with a ~30-second user-driven action |
+| [`Invoke-DeviceEnrollment.ps1`](scripts/device-enrollment/windows/Invoke-DeviceEnrollment.ps1) | Windows (PowerShell) | Takes over the local account and binds the device to the correct JumpCloud user during enrollment | Replaces a manual, multi-step per-device admin task with a roughly one-minute, user-driven action |
 
 > _More scripts (macOS / Bash) are on the [roadmap](#roadmap) — this toolkit is built to grow._
 
@@ -87,13 +86,16 @@ states devices show up in.
 
 ## How it works
 
-`Invoke-DeviceEnrollment.ps1` runs through a guarded, fail-safe pipeline. Each stage only
-proceeds if the previous one succeeded; any failure is captured, surfaced to the user, and
-logged back to the device record.
+`Invoke-DeviceEnrollment.ps1` is dispatched as a JumpCloud Command that runs automatically
+when the agent registers on the device — whether the user installs the agent directly or
+self-enrolls through the JumpCloud User Portal. From there it runs through a guarded,
+fail-safe pipeline: each stage only proceeds if the previous one succeeded, and any failure
+is captured, surfaced to the user, and logged back to the device record.
 
 ```mermaid
 flowchart TD
-    A[MDM dispatches command] --> B[Bootstrap: install RunAsUser module]
+    A[User installs agent / self-enrolls via User Portal] --> A2[JumpCloud runs command at agent registration]
+    A2 --> B[Bootstrap: install RunAsUser module]
     B --> C[Prompt user for JumpCloud email]
     C --> D{Email provided?}
     D -- No --> X[Mark RequiresAction + show message]
@@ -152,30 +154,34 @@ jumpcloud-onboarding-toolkit/
 This script is designed to be dispatched from JumpCloud as a **Command** (run as `System`)
 targeting Windows devices.
 
-1. In the JumpCloud Admin Console, create a new **Command** → **Windows** → Select Powershell Checkbox.
+1. In the JumpCloud Admin Console, create a new **Command** with the trigger set to **after
+   Agent Install** → **Windows** → select the **PowerShell** checkbox.
 2. Paste the contents of
    [`Invoke-DeviceEnrollment.ps1`](scripts/device-enrollment/windows/Invoke-DeviceEnrollment.ps1).
-3. Provide the required values for the configuration placeholders (see
+3. Provide the required value for the configuration placeholder (see
    [Configuration](#configuration)).
-4. Trigger the command on the target device(s). The end user will see an email prompt, then a
-   result dialog when it finishes.
+4. Install the JumpCloud agent on the target device(s). The end user will see an email prompt,
+   then a result dialog when it finishes.
 
 ---
 
 ## Configuration
 
-Two placeholders at the top of the script must be supplied at deployment time:
+Only one placeholder needs to be supplied — the device ID is provided automatically by
+JumpCloud:
 
 ```powershell
 $JC_API_KEY = {{Apikey}}      # your JumpCloud API key
-$SystemID   = {{device.id}}   # the target system's JumpCloud ID
 ```
 
-These are **template placeholders**, substituted when the command is dispatched (for example,
-by your command/templating system). They are intentionally *not* real values in source.
+- **`{{Apikey}}`** — an **Automation Variable** that a JumpCloud admin must create in the
+  Admin Console. JumpCloud substitutes it at dispatch time, so the real key never lives in
+  source.
+- **`{{device.id}}`** — already referenced in the script and resolved **automatically** by
+  JumpCloud Commands (a built-in command variable); no setup required.
 
-> ⚠️ **Never commit a real API key.** Keep the placeholders in version control and inject the
-> real values only at dispatch time. See [Security considerations](#security-considerations).
+> ⚠️ **Never commit a real API key.** Use a JumpCloud **Automation Variable** instead, so the
+> key is injected only at dispatch time.
 
 ---
 
@@ -192,19 +198,6 @@ The script writes to `C:\Users\Public\Documents\`:
 On failure, a one-line diagnostic summary (binding status, issue, device state, local/JC user,
 email) is written to the device's **description** field in JumpCloud for quick triage. A
 single-line status summary is also emitted to the command output for visibility in the console.
-
----
-
-## Security considerations
-
-Called out transparently so the trade-offs are clear:
-
-- **API key scope** — use a key with the **least privilege** needed for the operations listed
-  in [Prerequisites](#prerequisites). The key has broad reach while the command runs.
-- **Plaintext input files** — the user's email is written to `C:\Users\Public\Documents`, which
-  is readable by all local users. The files are transient but not encrypted.
-- **No secrets in source** — the API key is only ever present via the deployment-time
-  placeholder; nothing sensitive is committed to this repository.
 
 ---
 

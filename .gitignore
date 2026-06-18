@@ -35,3 +35,6 @@ PSScriptAnalyzerSettings.psd1
 
 # ---- Local tooling ----
 .claude/
+
+# ---- Local staging (not part of this repo) ----
+Laps Github/

@@ -28,15 +28,9 @@ states devices show up in.
 > **The result:** what used to be a multi-step, per-device admin task becomes a roughly
 > one-minute, user-driven action — turning hours of hands-on onboarding into minutes.
 
-<!--
-  📸 SCREENSHOT PLACEHOLDER (hero image)
-  Add a screenshot of the enrollment prompt or the success dialog here.
-  Recommended: drop the image in docs/screenshots/ and update the path below.
--->
 <div align="center">
 
-<!-- ![Device enrollment in action](docs/screenshots/enrollment-hero.png) -->
-*📸 Screenshot coming soon — add your enrollment / success dialog image here.*
+![Device enrollment success dialog](docs/screenshots/success-dialog.png)
 
 </div>
 
@@ -47,6 +41,7 @@ states devices show up in.
 - [Highlights](#highlights)
 - [What's in the toolkit](#whats-in-the-toolkit)
 - [How it works](#how-it-works)
+- [What the user sees](#what-the-user-sees)
 - [Repository structure](#repository-structure)
 - [Prerequisites](#prerequisites)
 - [Deployment](#deployment)
@@ -113,6 +108,20 @@ flowchart TD
     L --> M[Success: prompt user to re-login]
     X --> N[Write diagnostics to device description]
 ```
+
+---
+
+## What the user sees
+
+The entire experience for the end user is two simple dialogs — enter an email, then confirm.
+
+<div align="center">
+
+| Step 1 — Enter email | Step 2 — Success |
+|:---:|:---:|
+| ![Email prompt](docs/screenshots/email-prompt.png) | ![Success dialog](docs/screenshots/success-dialog.png) |
+
+</div>
 
 ---
 
